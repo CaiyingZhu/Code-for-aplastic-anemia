@@ -294,6 +294,7 @@ table(AA_Ctrl.DEGs.filtered$cluster)
 # 11 19 17 14  8 11 10
 
 ##  heatmap and summary of DEG frequency in each cell types
+disease <- c("non-SAA","SAA")
 for(t in disease){
 	 AA_Ctrl.DEGs.this.filtered <- AA_Ctrl.DEGs.filtered[AA_Ctrl.DEGs.filtered$disease == t ,]
 	 AA_Ctrl.DEGs.this <- AA_Ctrl.DEGs[AA_Ctrl.DEGs$disease == t,]    
