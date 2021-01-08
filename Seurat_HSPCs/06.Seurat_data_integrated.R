@@ -1,3 +1,6 @@
+## integrate cells from two healthy control from our recent published 
+## study(Xie XW, et al. National Science Review. 2020) and cells from
+## this study.
 rm(list=ls())
 pwd <- getwd()
 library(reticulate)
