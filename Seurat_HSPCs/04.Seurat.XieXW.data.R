@@ -1,3 +1,5 @@
+## create seurat object of cells from two healthy control from our recent 
+## published study(Xie XW, et al. National Science Review. 2020)
 rm(list=ls())
 pwd <- getwd()
 ## set directory containing Seuratv3 package
