@@ -6,12 +6,10 @@ library(ggplot2)
 library(cowplot)
 
 ## load data
-load(paste0(pwd,"/int/01.seurat.data.v2.Rdata"))
-load(paste0(pwd,"/int/01.seurat.data.v2.ctrl4.Rdata"))
+load(paste0(pwd,"/int/01.seurat.data.Ctrl.Rdata"))
+load(paste0(pwd,"/int/01.seurat.data.AA.Rdata"))
 
-## merge ctrl1 and ctrl4 object
 ## Normalization and scale data
-ctrl.clean.obj <- MergeSeurat(object1 = ctrl.clean.obj, object2 = ctrl4.clean.obj)
 ctrl.clean.obj <- NormalizeData(object = ctrl.clean.obj, normalization.method = "LogNormalize", scale.factor = 10000)
 ctrl.clean.obj <- ScaleData(ctrl.clean.obj, display.progress = F, vars.to.regress = c("percent.mito","nUMI"))
 
@@ -83,7 +81,7 @@ p4 <- TSNEPlot(hspc.aligned.obj, do.label = T, do.return = T, pt.size = 0.5, gro
 p5 <- TSNEPlot(hspc.aligned.obj, do.label = T, do.return = T, pt.size = 0.5, group.by ="res.1") + xlab("res_1")
 p6 <- TSNEPlot(hspc.aligned.obj, do.label = T, do.return = T, pt.size = 0.5, group.by ="res.1.2") + xlab("res_1.2")
 plot_grid(p1, p2, p3, p4, p5, p6, nrow=2)
-ggsave(paste(pwd, "/output/merge/aligned.tSNE_clustering.dimUse", dimSelected, ".pdf",sep=""), height=8, width=14, device="pdf")
+ggsave(paste(pwd, "/output/aligned.tSNE_clustering.dimUse", dimSelected, ".pdf",sep=""), height=8, width=14, device="pdf")
 
 # use resolution 0.8 to identify clusters
 hspc.aligned.obj <- FindClusters(hspc.aligned.obj, reduction.type = "cca.aligned", resolution = 0.8, dims.use = 1:dimSelected, force.recalc =T)
@@ -116,7 +114,7 @@ table(conserved.markers$cluster)
 num.topMarkers <- 6
 for(i in levels(hspc.aligned.obj@ident)){
 	FeaturePlot(object = hspc.aligned.obj, features.plot = head(conserved.markers$gene[conserved.markers$cluster ==i], n=num.topMarkers), min.cutoff = "q8", cols.use = c("lightgrey","blue"), pt.size = 0.5)
-	ggsave(paste(pwd, "/output/merge/hspc.topFeaturePlot.c", i, ".ctrl1-4.AA.pdf", sep=""), height=7, width=7, device="pdf")
+	ggsave(paste(pwd, "/output/hspc.topFeaturePlot.c", i, ".ctrl1-4.AA.pdf", sep=""), height=7, width=7, device="pdf")
 }
 
 ## rename 
