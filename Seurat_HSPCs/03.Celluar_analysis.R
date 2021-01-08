@@ -112,11 +112,11 @@ ggplot(hspc.counts.melt, aes(x=factor(Sample, levels=hspc.sample.order), y=Perce
 	xlab("") + theme(axis.text.x=element_text(angle=90))
 ggsave(paste0(pwd, "/output/hspc.clusterFrequency_byPatient.pdf"))
 
-# order samples by each cluster
-# show the position of SAA and 
-# perform wilcox.test to evaluate
-# the cellular composition bias in
-# SAA vs. non-SAA
+## order samples by each cluster
+## show the position of SAA and 
+## perform wilcox.test to evaluate
+## the cellular composition bias in
+## SAA vs. non-SAA
 sample.SAA <- c("P10", "P11", "P15")
 hspc.counts.melt$type <- "non-SAA"
 hspc.counts.melt$type[ hspc.counts.melt$Sample %in% sample.SAA] <- "SAA"
@@ -154,7 +154,7 @@ library(ggplot2)
 target.groups <- c("HSC/MPP", "Neu1")
 for(i in target.groups){
 	 hsc.saa <- hspc.counts.melt$Percentage[ hspc.counts.melt$type == "SAA" & hspc.counts.melt$Cluster==i]
-	 hsc.caa <- hspc.counts.melt$Percentage[ hspc.counts.melt$type == "CAA" & hspc.counts.melt$Cluster==i]
+	 hsc.caa <- hspc.counts.melt$Percentage[ hspc.counts.melt$type == "non-SAA" & hspc.counts.melt$Cluster==i]
 	 wilcox.test.Pvalue <- format(wilcox.test(hsc.saa, hsc.caa)$p.value, digits=2)
 	 ggplot(subset(hspc.counts.melt, Cluster==i & type != "Ctrl"), aes(x=type, y=Percentage)) +
 		 geom_boxplot(aes(fill=factor(type, levels=c("non-SAA", "SAA"))), outlier.shape = NA) + theme_classic() + 
