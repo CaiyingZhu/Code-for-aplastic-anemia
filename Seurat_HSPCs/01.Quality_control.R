@@ -87,7 +87,7 @@ ctrl.clean.obj <- SubsetData(object = ctrl.obj, cells.use = ctrl.obj@cell.names[
 mito.genes <- grep(pattern = "^MT-", x = rownames(x = AA.obj@data), value = TRUE)
 percent.mito <- Matrix::colSums(AA.obj@raw.data[mito.genes, ])/Matrix::colSums(AA.obj@raw.data)
 AA.obj <- AddMetaData(object = AA.obj, metadata = percent.mito, col.name = "percent.mito")
-# filter cells by phenotype cell type (such as HSC,LMPP,MPP,MLP,BNK,CMP,GMP,MEP)
+# filter cells
 fold.sd <- 2
 # nGene: mean +/- fold.sd * sd, 
 # nUMI: mean +/- fold.sd * sd, 
@@ -125,7 +125,6 @@ ggsave(paste(pwd, "/output/nUMI.pdf", sep=""),width=8,height=4)
 plot_grid(ctrl.mito, AA.mito)
 ggsave(paste(pwd, "/output/rMito.pdf", sep=""),width=8,height=4)
 
-## Cells per sample
 ## remove samples with less than 20 cells
 ## we also discard the sample with less than 20 cells of HSPCs and without T cells
 AA.clean.obj <- SubsetData(object =AA.clean.obj, cells.use = AA.clean.obj@cell.names[! AA.clean.obj@meta.data$SampleID %in% c("P16","P0")], subset.raw =T)
