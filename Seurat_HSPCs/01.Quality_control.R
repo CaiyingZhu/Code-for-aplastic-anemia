@@ -134,12 +134,7 @@ ctrl.clean.obj@raw.data <- ctrl.clean.obj@raw.data[row.names(ctrl.clean.obj@data
 AA.clean.obj@data <- AA.clean.obj@data[grep(pattern="^MT-|^RPL|^RPS", x=row.names(AA.clean.obj@data), value=T, invert = T),]
 AA.clean.obj@raw.data <- AA.clean.obj@raw.data[row.names(AA.clean.obj@data),]
 
-#### Normalization and scale data
-ctrl.clean.obj <- NormalizeData(object = ctrl.clean.obj, normalization.method = "LogNormalize", scale.factor = 10000)
-ctrl.clean.obj <- ScaleData(ctrl.clean.obj, display.progress = F)
-#### Normalization and scale data
-AA.clean.obj <- NormalizeData(object = AA.clean.obj, normalization.method = "LogNormalize", scale.factor = 10000)
-AA.clean.obj <- ScaleData(AA.clean.obj, display.progress = F)
-
 ## save data
-save(ctrl.obj, ctrl.clean.obj, AA.obj, AA.clean.obj, file = paste0(pwd,"/int/01.seurat.data.v2.Rdata"))
+save(ctrl.obj, ctrl.clean.obj, file = paste0(pwd,"/int/01.seurat.data.Ctrl.Rdata"))
+save(AA.obj, AA.clean.obj, file = paste0(pwd,"/int/01.seurat.data.Ctrl.Rdata"))
+
