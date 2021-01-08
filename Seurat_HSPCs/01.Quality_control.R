@@ -136,5 +136,5 @@ AA.clean.obj@raw.data <- AA.clean.obj@raw.data[row.names(AA.clean.obj@data),]
 
 ## save data
 save(ctrl.obj, ctrl.clean.obj, file = paste0(pwd,"/int/01.seurat.data.Ctrl.Rdata"))
-save(AA.obj, AA.clean.obj, file = paste0(pwd,"/int/01.seurat.data.Ctrl.Rdata"))
+save(AA.obj, AA.clean.obj, file = paste0(pwd,"/int/01.seurat.data.AA.Rdata"))
 
