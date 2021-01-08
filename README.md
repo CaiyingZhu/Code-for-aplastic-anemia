@@ -4,7 +4,4 @@
 
 2. SCENIC folder includes codes for transcription factor and gene co-expression network construction, regulon activity of each single cell of HSPCs, single cell clustering base on regulon activity, and differential regulon activity analysis.
 
-3. Cell-cell_interaction folder contains two scripts, 
-
-
-
+3. Cell-cell_interaction folder contains the scripts for downstream analysis of the output of cellphoneDB, a package for infering cell to cell communication.
