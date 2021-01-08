@@ -26,11 +26,6 @@ XieXW.clean.obj@meta.data$source <- "Ctrl"
 XieXW.clean.obj@meta.data$dataset <- "XieXW"
 reference.obj@meta.data$dataset <- "reference"
 
-XieXW.clean.obj@meta.data$Sex[XieXW.clean.obj@meta.data$SampleID=="Ctrl5"] <- "Male"
-XieXW.clean.obj@meta.data$Sex[XieXW.clean.obj@meta.data$SampleID=="Ctrl6"] <- "Female"
-XieXW.clean.obj@meta.data$Age[XieXW.clean.obj@meta.data$SampleID=="Ctrl5"] <- 33
-XieXW.clean.obj@meta.data$Age[XieXW.clean.obj@meta.data$SampleID=="Ctrl6"] <- 29
-
 inter.list <- list("reference" = reference.obj, "XieXW" = XieXW.clean.obj)
 for(i in 1:length(inter.list)) {
      inter.list[[i]] <- NormalizeData(inter.list[[i]], verbose = FALSE)
