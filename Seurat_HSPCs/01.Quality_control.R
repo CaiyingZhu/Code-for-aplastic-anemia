@@ -35,13 +35,13 @@ meta.table <- read.table(meta.file, head=T, stringsAsFactors=F)
 # assign row names
 row.names(meta.table) <- meta.table[["CellID"]]
 
-## remove Respones
+## remove cells colected from samples response to treatment
 treat.cellID <- meta.table$CellID[ meta.table$Treatment != "untreated"]
 AA.table <- AA.table[, ! names(AA.table) %in% treat.cellID]
 meta.table <- meta.table[ meta.table$Treatment == "untreated",]
 
 ## seperate ctrl and AA meta data
-ctrl.meta <- meta.table[meta.table$SampleID == c("Ctrl1"),]
+ctrl.meta <- meta.table[meta.table$SampleID == c("Ctrl1","Ctrl4"),]
 AA.meta <- meta.table[colnames(AA.table),]
 
 #### create Seurat object
