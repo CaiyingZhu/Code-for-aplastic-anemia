@@ -1,3 +1,5 @@
+## quality control on single cells and 
+## create seurat objects of control and AA
 rm(list=ls())
 pwd <- getwd()
 library(reticulate)
