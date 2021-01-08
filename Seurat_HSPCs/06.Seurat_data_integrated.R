@@ -24,12 +24,12 @@ reference.obj <- UpdateSeuratObject(hspc.aligned.obj)
 reference.obj@meta.data$dataset <- ""
 reference.obj@meta.data$dataset[reference.obj@meta.data$SampleID %in% c("Ctrl1","Ctrl4")] <- "dataset1"
 reference.obj@meta.data$dataset[!reference.obj@meta.data$SampleID %in% c("Ctrl1","Ctrl4")] <- "dataset2"
-ABC.clean.obj@meta.data$dataset <- "dataset3"
+XieXW.clean.obj@meta.data$dataset <- "dataset3"
 reference.list <- SplitObject(reference.obj, split.by = "dataset")
 
 ## integrate data
 merge.obj <- merge(reference.obj,ABC.clean.obj)
-AACtrl.list <- list("dataset1" = reference.list[[1]],"dataset2" = reference.list[[2]],"dataset" = ABC.clean.obj)
+AACtrl.list <- list("dataset1" = reference.list[[1]],"dataset2" = reference.list[[2]],"dataset" = XieXW.clean.obj)
 
 ## normalization and find variance of each object
 for(i in 1:length(x = AACtrl.list)) {
