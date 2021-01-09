@@ -1,7 +1,8 @@
 rm(list=ls())
 pwd <- getwd()
 library(reticulate)
-library(Seurat)
+## use Seurat v2
+library(Seurat) 
 library(ggplot2)
 library(cowplot)
 
