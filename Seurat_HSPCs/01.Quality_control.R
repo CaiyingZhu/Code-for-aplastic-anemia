@@ -3,7 +3,7 @@
 rm(list=ls())
 pwd <- getwd()
 library(reticulate)
-library(Seurat)
+library(Seurat) # version 2
 library(ggplot2)
 library(cowplot)
 
