@@ -1,3 +1,4 @@
+## R version 3.5.0; Seurat version 2.3.4
 ### subroutines
 ## select high variable genes
 pcaGenes <- function(objs){
@@ -111,10 +112,8 @@ scenicOptions <- readRDS("int/scenicOptions.Rds")
 # high confident AUC 
 regulonAUC <- getAUC(loadInt(scenicOptions, "aucell_regulonAUC"))
 names(dimnames(regulonAUC)) <- NULL
-dim(regulonAUC) # 664 6259
-# cell  info
+
 cellInfo <- loadFile(scenicOptions, getDatasetInfo(scenicOptions, "cellInfo"), ifNotExists="null")
-dim(cellInfo)   # 6259   19
 
 # binary nonDup
 regulonBinary <- loadInt(scenicOptions, "aucell_binary_nonDupl")
@@ -125,8 +124,7 @@ tf.obj <- CreateSeuratObject(
  	 raw.data = regulonBinary,
 	 meta.data = cellInfo,
 	 min.cells = 0, min.features = 0
-     )
-	 
+     )	 
 tf.obj@data <- tf.obj@raw.data
 tf.obj@scale.data <- tf.obj@raw.data
 
@@ -137,10 +135,8 @@ tf.activity.obj <- CreateSeuratObject(
      )
 tf.activity.obj@data <- tf.activity.obj@raw.data
 tf.activity.obj@scale.data <- tf.activity.obj@raw.data
-
 ## PCA genes
 pc.genes <- pcaGenes(c(tf.obj))
-length(pc.genes) # 305
 
 # combine
 tf.obj <- RunPCA(tf.obj, pc.genes = pc.genes, pcs.compute = 30, pcs.print=NULL)
@@ -169,22 +165,17 @@ tf.obj <- FindClusters(tf.obj, reduction.type = "pca", resolution = c(0.2, 0.3, 
 # Visualization
 p1 <- DimPlot(tf.obj, reduction.use="umap", do.return = T, pt.size = 0.5, group.by = "source") + xlab("source")
 p2 <- DimPlot(tf.obj, reduction.use="umap", do.return = T, pt.size = 0.5, group.by = "SampleID") + xlab("SampleID")
-p3 <- DimPlot(tf.obj, reduction.use="umap", do.label = T, do.return = T, pt.size = 0.5, group.by ="res.0.2") + xlab("res_0.2")
-p4 <- DimPlot(tf.obj, reduction.use="umap", do.label = T, do.return = T, pt.size = 0.5, group.by ="res.0.3") + xlab("res_0.3")
-p5 <- DimPlot(tf.obj, reduction.use="umap", do.label = T, do.return = T, pt.size = 0.5, group.by ="res.0.35") + xlab("res_0.35")
-p6 <- DimPlot(tf.obj, reduction.use="umap", do.label = T, do.return = T, pt.size = 0.5, group.by ="res.0.4") + xlab("res_0.4")
-plot_grid(p1, p2, p3, p4, p5, p6, nrow=1)
-ggsave(paste(pwd, "/output/hspc.umap_clustering.dimUse", dimSelected, ".pdf", sep=""), height=4, width=21, device="pdf")
-p7 <- DimPlot(tf.obj, reduction.use="umap", do.label = T, do.return = T, pt.size = 0.5, group.by = "cellGroup", no.legend=T)
-plot_grid(p1, p4, p7, nrow=1)
+p3 <- DimPlot(tf.obj, reduction.use="umap", do.label = T, do.return = T, pt.size = 0.5, group.by ="res.0.3") + xlab("res_0.3")
+plot_grid(p1, p2, p3, nrow=1)
+ggsave(paste(pwd, "/output/hspc.umap_clustering.dimUse", dimSelected, ".pdf", sep=""), height=4, width=10, device="pdf")
+
+p4 <- DimPlot(tf.obj, reduction.use="umap", do.label = T, do.return = T, pt.size = 0.5, group.by = "cellGroup", no.legend=T)
+plot_grid(p1, p3, p4, nrow=1)
 ggsave(paste(pwd, "/output/hspc.umap_clustering.projectionBySeurat.dimUse", dimSelected, ".pdf", sep=""), height=4, width=10, device="pdf")
 
 tf.obj@meta.data$Disease_types <- factor(tf.obj@meta.data$Disease_types,levels=c("Ctrl","non-SAA","SAA"))
 DimPlot(tf.obj, reduction.use="umap", do.return = T, pt.size = 0.1, group.by = "Disease_types") + xlab("Disease_types")
 ggsave(paste(pwd, "/output/hspc.umap_clustering.projectionBySeurat.dimUse", dimSelected, ".Disease_types.pdf", sep=""), height=2.5, width=3.2, device="pdf")
-
-# regulon defined clusters
-tf.obj <- FindClusters(tf.obj, reduction.type = "pca", resolution = 0.3, dims.use = 1:dimSelected, force.recalc =T)
 
 library(scales)
 cell_counts.byCluster <- data.frame()
