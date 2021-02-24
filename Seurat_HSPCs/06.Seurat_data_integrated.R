@@ -1,6 +1,7 @@
-## integrate cells from two healthy control from our recent published 
-## study(Xie XW, et al. National Science Review. 2020) and cells from
-## this study.
+## R version 3.5.0; Seurat version 3.1.5
+## integrate cells from our recent published 
+## study(Xie XW, et al. National Science Review. 2020) 
+## and cells from this study.
 rm(list=ls())
 pwd <- getwd()
 .libPaths("/public/home/zhucy/software/R-3.5.0/UpdateLibrary")
