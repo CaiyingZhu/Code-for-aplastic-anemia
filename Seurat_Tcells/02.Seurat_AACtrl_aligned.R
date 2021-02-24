@@ -1,4 +1,6 @@
+## R version 3.5.0; Seurat version 2.3.4
 rm(list=ls())
+pwd <- getwd()
 library(reticulate)
 use_python("/public/home/zhucy/anaconda3/bin/python")
 py_config()
@@ -8,7 +10,6 @@ library(ggplot2)
 library(cowplot)
 library(uwot)
 setwd("/public/home/zhucy/SingleCell/AA/Tcell/Seurat")
-pwd <- getwd()
 
 #cell.label <- "CD4T"
 cell.label <- "CD8T"
@@ -41,10 +42,8 @@ pcaGenes <- function(objs){
 pc.genes <- pcaGenes(c(Ctrl.obj, AA.obj))
 length(pc.genes)
 
-## combine
+## combine Ctrl and AA objects
 combine.obj <- RunCCA(Ctrl.obj, AA.obj, genes.use = pc.genes, num.cc = 30, group.by = "source")
-dim(combine.obj@raw.data) # 14641  2057 CD8T: 14641  2024
-dim(combine.obj@data)     # 14641  2057 CD8T: 14641  2024
 
 ## visualize results of CCA plot CC1 versus CC2 and look at a violin plot
 p1 <- DimPlot(object = combine.obj, reduction.use = "cca", group.by = "source", pt.size = 0.5, do.return = TRUE)
