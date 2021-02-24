@@ -1,12 +1,10 @@
+## R version 3.5.0; Seurat version 2.3.4
 rm(list=ls())
+pwd <- getwd()
 library(Seurat)
 library(dplyr)
 library(Hmisc)
-
-pwd <- getwd()
-
 #### import UMI table, 'genes' x 'cells'
-
 ## read in ctrl counts data and meta table
 ctrl.file <- "../data/Ctrl_umi_Codinggene_Tcell.txt"
 ctrl.table <- read.table(ctrl.file, head=T, stringsAsFactors=F)
@@ -60,7 +58,9 @@ mito.genes <- grep(pattern = "^MT-", x = rownames(x = ctrl.obj@data), value = TR
 percent.mito <- Matrix::colSums(ctrl.obj@raw.data[mito.genes, ])/Matrix::colSums(ctrl.obj@raw.data)
 ctrl.obj <- AddMetaData(object = ctrl.obj, metadata = percent.mito, col.name = "percent.mito")
 
-# filter cells by cell type
+## filter cells by cell type
+## separately filter out Ctrl2
+## and Ctrl4 T cells.
 fold.sd <- 2
 # nGene: mean +/- fold.sd * sd, 
 # nUMI: mean +/- fold.sd * sd, 
@@ -145,8 +145,8 @@ save(ctrl.obj, ctrl.clean.obj, AA.obj, AA.clean.obj, file=paste0(pwd,"/int/01.se
 #### Clustering of Ctrl cells
 ## load data
 rm(list=ls())
-library(Seurat)
 pwd <- getwd()
+library(Seurat)
 load(paste0(pwd,"/int/01.seurat.data.Rdata"))
 
 #cell.label <- "CD4T"
@@ -170,8 +170,6 @@ pcaGenes <- function(objs){
 	     })))
      }	 
 pc.genes <- pcaGenes(c(sub.obj))
-length(pc.genes) # CD4T, 434
-length(pc.genes) # CD8T, 465
 
 ## Dimension reduction using PCA
 sub.obj <- RunPCA(object = sub.obj, pc.genes = pc.genes, do.print = FALSE, pcs.compute = 60)
@@ -188,27 +186,22 @@ sub.obj <- RunTSNE(sub.obj, reduction.use = "pca",
 	     dims.use = 1:pca.pcs, do.fast = T, dim.embed = 2, 
 	     perplexity = tsne.perplexity)
 sub.obj <- FindClusters(sub.obj, reduction.type = "pca", 
-	     resolution = c(0.3, 0.35, 0.4, 0.6), dims.use = 1:pca.pcs, force.recalc =T)
+#	     resolution = 0.3,  ## CD4T
+	     resolution = 0.35,  ## CD8T	
+	     dims.use = 1:pca.pcs, force.recalc =T)
 
 # Visualization
 p0 <- TSNEPlot(sub.obj, do.label = T, do.return = T, pt.size = 0.5, group.by = "Tissue") + xlab("Tissue")
 p1 <- TSNEPlot(sub.obj, do.label = T, do.return = T, pt.size = 0.5, group.by = "LibraryID") + xlab("LibraryID")
 p2 <- TSNEPlot(sub.obj, do.label = T, do.return = T, pt.size = 0.5, group.by = "res.0.3") + xlab("res.0.3")
-p3 <- TSNEPlot(sub.obj, do.label = T, do.return = T, pt.size = 0.5, group.by = "res.0.35") + xlab("res.0.35")
-p4 <- TSNEPlot(sub.obj, do.label = T, do.return = T, pt.size = 0.5, group.by = "res.0.4") + xlab("res.0.4")
-p5 <- TSNEPlot(sub.obj, do.label = T, do.return = T, pt.size = 0.5, group.by = "res.0.6") + xlab("res.0.6")
-plot_grid(p0, p1, p2, p3, p4, p5, nrow=2)
-ggsave(paste(pwd, "/output/", cell.label, ".PCAonly.tSNE_clustering.dimUse", pca.pcs, ".prePlxty_",tsne.perplexity, ".pdf", sep=""), height=6, width=10, device="pdf")
-
-## CD4T res0.3, CD8T res0.35
-sub.obj <- FindClusters(sub.obj, reduction.type = "pca", 
-	      resolution = 0.35, dims.use = 1:pca.pcs, force.recalc =T)
+plot_grid(p0, p1, p2, nrow=1)
+ggsave(paste(pwd, "/output/", cell.label, ".PCAonly.tSNE_clustering.dimUse", pca.pcs, ".prePlxty_",tsne.perplexity, ".pdf", sep=""), height=4, width=10, device="pdf")
 save(sub.obj, pc.genes, file=paste0(pwd, "/int/02.", cell.label, ".PCA_clustering.RData"))
 
 #### Cell assignment from AA to Ctrl
 rm(list=ls())
-library(Seurat)
 pwd <- getwd()
+library(Seurat)
 load(paste0(pwd,"/int/01.seurat.data.Rdata"))
 
 #cell.label <- "CD4T"
