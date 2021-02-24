@@ -1,3 +1,4 @@
+## R version 3.5.0; Seurat version 2.3.4
 rm(list=ls())
 pwd <- getwd()
 library(Seurat)
