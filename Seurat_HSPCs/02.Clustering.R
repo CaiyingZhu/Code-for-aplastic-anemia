@@ -1,7 +1,7 @@
+## R version 3.5.0; Seurat version 2.3.4
 rm(list=ls())
 pwd <- getwd()
 library(reticulate)
-## use Seurat v2
 library(Seurat) 
 library(ggplot2)
 library(cowplot)
@@ -32,8 +32,7 @@ pcaGenes <- function(objs){
 
 ## PCA genes
 pc.genes <- pcaGenes(c(ctrl.clean.obj, AA.clean.obj))
-length(pc.genes) # 644
-save(pc.genes,file = paste0(pwd,"/int/pc.gene.644.Rdata"))
+save(pc.genes,file = paste0(pwd,"/int/pc.gene.Rdata"))
 
 # group label
 ctrl.clean.obj@meta.data$source <- "Ctrl"
@@ -41,8 +40,6 @@ AA.clean.obj@meta.data$source <- "AA"
 
 # combine
 hspc.obj <- RunCCA(ctrl.clean.obj, AA.clean.obj, genes.use = pc.genes, num.cc = 30, group.by = "source")
-dim(hspc.obj@raw.data) # 16571  4881
-dim(hspc.obj@data)     # 16571  4881
 
 # visualize results of CCA plot CC1 versus CC2 and look at a violin plot
 p1 <- DimPlot(object = hspc.obj, reduction.use = "cca", group.by = "source", pt.size = 0.5, do.return = TRUE)
@@ -73,19 +70,13 @@ dev.off()
 
 #### Dimension reduction and clustering
 hspc.aligned.obj <- RunTSNE(hspc.aligned.obj, reduction.use = "cca.aligned", dims.use = 1:dimSelected, do.fast = T, dim.embed = 2)
-hspc.aligned.obj <- FindClusters(hspc.aligned.obj, reduction.type = "cca.aligned",resolution = c(0.6,0.8,1,1.2), dims.use = 1:dimSelected, force.recalc =T)
+hspc.aligned.obj <- FindClusters(hspc.aligned.obj, reduction.type = "cca.aligned",resolution = 0.8, dims.use = 1:dimSelected, force.recalc =T)
 # Visualization
 p1 <- TSNEPlot(hspc.aligned.obj, do.return = T, pt.size = 0.5, group.by = "source") + xlab("source")
 p2 <- TSNEPlot(hspc.aligned.obj, do.return = T, pt.size = 0.5, group.by = "SampleID") + xlab("SampleID")
-p3 <- TSNEPlot(hspc.aligned.obj, do.label = T, do.return = T, pt.size = 0.5, group.by ="res.0.6") + xlab("res_0.6")
-p4 <- TSNEPlot(hspc.aligned.obj, do.label = T, do.return = T, pt.size = 0.5, group.by ="res.0.8") + xlab("res_0.8")
-p5 <- TSNEPlot(hspc.aligned.obj, do.label = T, do.return = T, pt.size = 0.5, group.by ="res.1") + xlab("res_1")
-p6 <- TSNEPlot(hspc.aligned.obj, do.label = T, do.return = T, pt.size = 0.5, group.by ="res.1.2") + xlab("res_1.2")
-plot_grid(p1, p2, p3, p4, p5, p6, nrow=2)
-ggsave(paste(pwd, "/output/aligned.tSNE_clustering.dimUse", dimSelected, ".pdf",sep=""), height=8, width=14, device="pdf")
-
-# use resolution 0.8 to identify clusters
-hspc.aligned.obj <- FindClusters(hspc.aligned.obj, reduction.type = "cca.aligned", resolution = 0.8, dims.use = 1:dimSelected, force.recalc =T)
+p3 <- TSNEPlot(hspc.aligned.obj, do.label = T, do.return = T, pt.size = 0.5, group.by ="res.0.8") + xlab("res_0.8")
+plot_grid(p1, p2, p3, nrow=1)
+ggsave(paste(pwd, "/output/aligned.tSNE_clustering.dimUse", dimSelected, ".pdf",sep=""), height=5, width=14, device="pdf")
 
 ## Conserved cell type markers
 # - Find markers in cluster in Ctrl cells, denoted as A
@@ -118,7 +109,7 @@ for(i in levels(hspc.aligned.obj@ident)){
 	ggsave(paste(pwd, "/output/hspc.topFeaturePlot.c", i, ".ctrl1-4.AA.pdf", sep=""), height=7, width=7, device="pdf")
 }
 
-## rename 
+## rename cluster
 oldCelltype <- c("0","1","2","3","4","5","6","7","8")
 newCelltype <- c("Neu2","MLP","HSC/MPP","LMPP","MEP","Neu1","MD1","MD2","EBM")
 
