@@ -1,3 +1,4 @@
+## R version 3.5.0; Seurat version 3.1.5
 ## cell type prediction
 rm(list=ls())
 pwd <- getwd()
