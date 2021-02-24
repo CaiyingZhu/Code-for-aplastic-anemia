@@ -1,4 +1,5 @@
-## create seurat object of cells from two healthy control from our recent 
+## R version 3.5.0; Seurat version 3.1.5
+## create seurat object of single cells from our recent 
 ## published study(Xie XW, et al. National Science Review. 2020)
 rm(list=ls())
 pwd <- getwd()
@@ -48,24 +49,11 @@ cells.rm <- unique(unlist(lapply(unique(XieXW.obj@meta.data$Celltype), function(
 	}))
 	return(this.iterm.genes)
 })))
-length(cells.rm) # 113
 XieXW.clean.obj <- subset(XieXW.obj, cells = rownames(XieXW.obj@meta.data)[-cells.rm])
-
-## Cells per sample
-table(XieXW.clean.obj@meta.data$SampleID)
-# Ctrl5 Ctrl6
-#   648   730
-
-## data dimension
-dim(XieXW.clean.obj@assays$RNA@data)   # 16494  1378
-dim(XieXW.clean.obj@assays$RNA@counts) # 16494  1378
 
 #### Remove ribosome and mitochondria genes
 XieXW.clean.obj@assays$RNA@data <- XieXW.clean.obj@assays$RNA@data[grep(pattern="^MT-|^RPL|^RPS", x=row.names(XieXW.clean.obj@assays$RNA@data), value=T, invert = T),]
 XieXW.clean.obj@assays$RNA@counts <- XieXW.clean.obj@assays$RNA@counts[row.names(XieXW.clean.obj@assays$RNA@data),]
-
-dim(XieXW.clean.obj@assays$RNA@data)   # 16385  1378
-dim(XieXW.clean.obj@assays$RNA@counts) # 16385  1378
 
 #### Normalization and scale data
 XieXW.clean.obj <- NormalizeData(object = XieXW.clean.obj, normalization.method = "LogNormalize", scale.factor = 10000)
