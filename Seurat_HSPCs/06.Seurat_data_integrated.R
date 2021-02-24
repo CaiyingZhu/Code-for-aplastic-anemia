@@ -3,6 +3,7 @@
 ## this study.
 rm(list=ls())
 pwd <- getwd()
+.libPaths("/public/home/zhucy/software/R-3.5.0/UpdateLibrary")
 library(reticulate)
 use_python("/public/home/zhucy/anaconda3/bin/python")
 py_config()
