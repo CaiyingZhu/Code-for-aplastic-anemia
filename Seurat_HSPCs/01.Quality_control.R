@@ -1,9 +1,9 @@
+## R version 3.5.0; Seurat version 2.3.4
 ## quality control on single cells and 
 ## create seurat objects of control and AA
 rm(list=ls())
 pwd <- getwd()
 library(reticulate)
-## Seurat version 2
 library(Seurat)
 library(ggplot2)
 library(cowplot)
@@ -127,7 +127,6 @@ plot_grid(ctrl.mito, AA.mito)
 ggsave(paste(pwd, "/output/rMito.pdf", sep=""),width=8,height=4)
 
 ## remove samples with less than 20 cells
-## we also discard the sample with less than 20 cells of HSPCs and without T cells
 AA.clean.obj <- SubsetData(object =AA.clean.obj, cells.use = AA.clean.obj@cell.names[! AA.clean.obj@meta.data$SampleID %in% c("P16","P0")], subset.raw =T)
 
 #### Remove ribosome and mitochondria genes
